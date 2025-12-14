@@ -222,8 +222,8 @@ class FrontierCSEvaluator:
         if track == "algorithmic":
             return [str(p) for p in self.algorithmic_runner.list_problems()]
 
-        # Research problems - read from problems.txt
-        problems_file = self.docker_runner.research_dir / "problems.txt"
+        # Research problems - read from problems.txt in scripts/
+        problems_file = self.docker_runner.research_dir / "scripts" / "problems.txt"
         if not problems_file.exists():
             return []
 
@@ -231,8 +231,10 @@ class FrontierCSEvaluator:
         for line in problems_file.read_text().splitlines():
             line = line.strip()
             if line and not line.startswith("#"):
-                # Remove "research/" prefix if present
-                if line.startswith("research/"):
+                # Remove "research/problems/" prefix if present
+                if line.startswith("research/problems/"):
+                    line = line[len("research/problems/"):]
+                elif line.startswith("research/"):
                     line = line[len("research/"):]
                 problems.append(line)
         return problems

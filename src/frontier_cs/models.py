@@ -200,7 +200,7 @@ def detect_provider(model: str) -> str:
 
     if (provider_hint in {"", "openai", "azure", "azure_openai"}) and actual_lower.startswith("gpt"):
         return "openai"
-    if provider_hint in {"", "gemini", "google"} or "gemini" in actual_lower:
+    if provider_hint in {"gemini", "google"} or "gemini" in actual_lower:
         return "google"
     if provider_hint == "anthropic" or "claude" in actual_lower:
         return "anthropic"

@@ -23,8 +23,6 @@ Frontier-CS consists of two categories:
 - **Algorithmic Problems**: Competitive programming challenges, including optimization, construction, and interactive problems. For each algorithmic problem, we release the full problem statement, evaluator, and _one_ public test case.
 - **Research Problems**: Real-world systems challenges, including GPU kernels, distributed scheduling, ML pipelines, database optimization, and security exploits. For research problems, we release all data and scripts required to fully reproduce the results.
 
-Some of the problems are adapted from [ALE-bench](https://github.com/SakanaAI/ALE-Bench) and [AI-Driven Research for Systems (ADRS)](https://ucbskyadrs.github.io/).
-
 Frontier-CS is continuously expanding with new and increasingly challenging tasks contributed by our community.
 
 ## Quickstart
@@ -133,6 +131,10 @@ results = evaluator.evaluate_batch("research",
 ## Submit Your Results
 
 We currently release partial test cases for algorithmic problems to allow users to test and debug their solutions. To submit your solutions for full evaluation and have it included in the leaderboard, please send your solutions to qmang@berkeley.edu or wenhao.chai@princeton.edu following the instructions in [SUBMIT.md](SUBMIT.md).
+
+## Acknowledgments
+
+Some of the problems are adapted from [ALE-bench](https://github.com/SakanaAI/ALE-Bench) and [AI-Driven Research for Systems (ADRS)](https://ucbskyadrs.github.io/).
 
 ## Citing Us
 

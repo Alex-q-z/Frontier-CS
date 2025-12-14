@@ -24,7 +24,7 @@ from typing import Optional, Dict, Any, List, Tuple
 from datetime import datetime
 from importlib import metadata
 
-from test_scripts.llm_interface import (
+from llm_interface import (
     LLMInterface,
     GPT,
     Gemini,
@@ -1030,8 +1030,9 @@ def get_problem_name(problem_path: Path) -> str:
 
 
 def main():
-    base_dir = Path(__file__).parent
-    repo_root = base_dir.parent  # Root of the repository
+    base_dir = Path(__file__).parent  # research/scripts/
+    research_dir = base_dir.parent  # research/
+    repo_root = research_dir.parent  # Root of the repository
     ensure_numpy_version(REQUIRED_NUMPY_VERSION)
     load_env_file(base_dir / ".env")
 
@@ -1078,7 +1079,7 @@ def main():
     args = parser.parse_args()
 
     if not (args.problem_path or args.problem_list or args.solutions_file):
-        # Default to problems.txt in repo if present
+        # Default to problems.txt in scripts/ dir if present
         default_list = (base_dir / "problems.txt")
         if default_list.is_file():
             args.problem_list = str(default_list)
@@ -1161,7 +1162,8 @@ def main():
                 continue
             seen_problems.add(key)
             if not path_obj.is_absolute():
-                resolved = base_dir / path_obj
+                # Problem paths in problems.txt are relative to repo root
+                resolved = repo_root / path_obj
             else:
                 resolved = path_obj
             normalized_problems.append((resolved, display))
@@ -1181,7 +1183,7 @@ def main():
         print(f"Using model from --model: {args.model}")
         models_source_desc = f"--model ({args.model})"
     else:
-        # If --models-file not provided, default to repo models.txt
+        # If --models-file not provided, default to scripts/models.txt
         models_path = Path(args.models_file) if args.models_file else base_dir / "models.txt"
         if not models_path.is_absolute():
             models_path = base_dir / models_path
@@ -1246,10 +1248,11 @@ def main():
             if problem_entry.startswith("research/"):
                 relative_problem_str = problem_entry
             else:
-                relative_problem_str = f"research/{problem_entry.lstrip('./')}"
+                relative_problem_str = f"research/problems/{problem_entry.lstrip('./')}"
 
             try:
-                problem_path_real = (base_dir / relative_problem_str).resolve()
+                # Problem paths are relative to repo root
+                problem_path_real = (repo_root / relative_problem_str).resolve()
             except Exception:
                 print(f"WARNING: Invalid problem path '{problem_entry}' for {solution_name}; skipping.")
                 continue
@@ -1266,7 +1269,7 @@ def main():
                     print(f"WARNING: {exc}; skipping {solution_name}.")
                     continue
                 try:
-                    rel_path_for_name = problem_path_real.relative_to(base_dir)
+                    rel_path_for_name = problem_path_real.relative_to(repo_root / "research")
                 except ValueError:
                     rel_path_for_name = Path(problem_path_real.name)
                 problem_name = get_problem_name(rel_path_for_name)
@@ -1353,7 +1356,7 @@ def main():
             relative_problem_path = problem_path_real
             if problem_path_real.is_absolute():
                 try:
-                    relative_problem_path = problem_path_real.relative_to(base_dir)
+                    relative_problem_path = problem_path_real.relative_to(repo_root / "research")
                 except ValueError:
                     relative_problem_path = Path(problem_path_real.name)
 

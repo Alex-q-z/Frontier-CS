@@ -74,7 +74,7 @@ class DockerRunner(Runner):
 
     def get_problem_path(self, problem_id: str) -> Path:
         """Get the path to a research problem directory."""
-        return self.research_dir / problem_id
+        return self.research_dir / "problems" / problem_id
 
     def evaluate(
         self,

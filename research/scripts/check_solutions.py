@@ -116,10 +116,16 @@ def read_list_file(path: Path) -> List[str]:
 
 
 def read_problem_list(path: Path) -> List[str]:
-    """Read problems from problems.txt, normalizing 'research/' prefix."""
+    """Read problems from problems.txt, normalizing to problem ID."""
     problems = []
     for entry in read_list_file(path):
-        normalized = entry.split("research/", 1)[-1]
+        # Remove 'research/problems/' or 'research/' prefix
+        if entry.startswith("research/problems/"):
+            normalized = entry[len("research/problems/"):]
+        elif entry.startswith("research/"):
+            normalized = entry[len("research/"):]
+        else:
+            normalized = entry
         problems.append(normalized)
     return problems
 
@@ -372,8 +378,9 @@ def print_summary(result: dict, pairs_file: Optional[Path]):
 # ============================================================================
 
 def main():
-    base_dir = Path(__file__).parent
-    repo_root = base_dir.parent
+    base_dir = Path(__file__).parent  # research/scripts/
+    research_dir = base_dir.parent  # research/
+    repo_root = research_dir.parent  # Root of repository
 
     parser = argparse.ArgumentParser(
         description="Check solution coverage and pairs.txt consistency",
@@ -383,19 +390,19 @@ def main():
         "--problems-file",
         type=Path,
         default=base_dir / "problems.txt",
-        help="Problems file (default: research/problems.txt)",
+        help="Problems file (default: research/scripts/problems.txt)",
     )
     parser.add_argument(
         "--models-file",
         type=Path,
         default=base_dir / "models.txt",
-        help="Models file (default: research/models.txt)",
+        help="Models file (default: research/scripts/models.txt)",
     )
     parser.add_argument(
         "--variants-file",
         type=Path,
         default=base_dir / "num_solutions.txt",
-        help="Variants file (default: research/num_solutions.txt)",
+        help="Variants file (default: research/scripts/num_solutions.txt)",
     )
     parser.add_argument(
         "--solutions-dir",

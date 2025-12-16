@@ -26,12 +26,12 @@ try:
     df.to_csv(full_csv_output, index=False)
     print(f"Converted pickle to CSV: {full_csv_output}")
 
-    # --- 1. Randomly sample 5% for Train (No Replacement) ---
-    train_df = df.sample(frac=0.05, random_state=42)
+    # --- 1. Randomly sample 1% for Train (No Replacement) ---
+    train_df = df.sample(frac=0.01, random_state=42)
     train_df.to_csv(train_output, index=False)
     print(f"Created 'train' split with {len(train_df)} rows.")
 
-    # --- 2. Remaining 95% for Test (Keep Original Ordering) ---
+    # --- 2. Remaining 99% for Test (Keep Original Ordering) ---
     test_df = df.drop(train_df.index)
     test_df.to_csv(test_output, index=False)
     print(f"Created 'test' split with {len(test_df)} rows.")
